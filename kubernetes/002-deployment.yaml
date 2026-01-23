@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: external-lens-service-python
-        image: gravitate-registry.cr.de-fra.ionos.com/external-lens-service-python:devserver
+        image: ghcr.io/gravitate-health/external-lens-service-python:devserver
         imagePullPolicy: Always
         env:
         - name: ENVIRONMENT
