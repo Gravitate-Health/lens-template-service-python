@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: external-lens-service-python
+  name: lens-template-service-python
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: external-lens-service-python
+      app: lens-template-service-python
   template:
     metadata:
       labels:
-        app: external-lens-service-python
+        app: lens-template-service-python
     spec:
       containers:
-      - name: external-lens-service-python
-        image: ghcr.io/gravitate-health/external-lens-service-python:devserver
+      - name: lens-template-service-python
+        image: ghcr.io/gravitate-health/lens-template-service-python:devserver
         imagePullPolicy: Always
         env:
         - name: ENVIRONMENT
