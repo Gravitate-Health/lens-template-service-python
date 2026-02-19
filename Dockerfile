@@ -1,4 +1,4 @@
-FROM python:3.10-slim AS buildstage
+FROM python:3.13-slim AS buildstage
 
 WORKDIR /usr/src/app
 
