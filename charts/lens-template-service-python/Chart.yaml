@@ -1,0 +1,6 @@
+apiVersion: v2
+name: lens-template-service-python
+description: A Helm chart for deploying lens-template-service-python
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

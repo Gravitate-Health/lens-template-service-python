@@ -1,0 +1,61 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/gravitate-health/lens-template-service-python
+  tag: devserver
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+
+config:
+  env:
+    ENVIRONMENT: prod
+
+secret:
+  env:
+    API_KEY: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+networking:
+  # Options: istio | ingress | none
+  # Defaults to istio because an Istio VirtualService manifest exists in this repository.
+  type: istio
+  istio:
+    virtualService:
+      enabled: true
+      hosts:
+        - "*"
+      gateways:
+        - gh-gateway
+      uriPrefix: /external/
+      rewriteUri: /
+      corsPolicy:
+        allowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        allowOrigins:
+          - "*"
+        allowHeaders:
+          - content-type
+          - Accept
+  ingress:
+    enabled: true
+    className: ""
+    annotations: {}
+    hosts:
+      - host: ""
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []

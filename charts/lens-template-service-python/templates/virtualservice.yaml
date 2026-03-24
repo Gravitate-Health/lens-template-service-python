@@ -1,0 +1,33 @@
+{{- if and (eq .Values.networking.type "istio") .Values.networking.istio.virtualService.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "lens-template-service-python.fullname" . }}
+  labels:
+    {{- include "lens-template-service-python.labels" . | nindent 4 }}
+spec:
+  hosts:
+    {{- toYaml .Values.networking.istio.virtualService.hosts | nindent 4 }}
+  gateways:
+    {{- toYaml .Values.networking.istio.virtualService.gateways | nindent 4 }}
+  http:
+    - match:
+        - uri:
+            prefix: {{ .Values.networking.istio.virtualService.uriPrefix | quote }}
+      rewrite:
+        uri: {{ .Values.networking.istio.virtualService.rewriteUri | quote }}
+      route:
+        - destination:
+            host: {{ include "lens-template-service-python.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: {{ .Values.service.port }}
+      corsPolicy:
+        allowMethods:
+          {{- toYaml .Values.networking.istio.virtualService.corsPolicy.allowMethods | nindent 10 }}
+        allowOrigins:
+          {{- range .Values.networking.istio.virtualService.corsPolicy.allowOrigins }}
+          - exact: {{ . | quote }}
+          {{- end }}
+        allowHeaders:
+          {{- toYaml .Values.networking.istio.virtualService.corsPolicy.allowHeaders | nindent 10 }}
+{{- end }}
